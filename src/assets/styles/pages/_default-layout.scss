@@ -1,4 +1,36 @@
+@use "sass:math";
+
 @use '../abstracts/variables' as var;
+
+$mobile-size: 360;
+
+/* vw 변환 function */
+@function vw($target) {
+  @if type-of($target)==number {
+    @return math.div($target * 100, $mobile-size) * 1vw;
+  }
+
+  @else if type-of($target)==list {
+    $vw: ();
+
+    @each $value in $target {
+      @if type-of($value)==number {
+        $vw: append($vw, math.div($value * 100, $mobile-size) * 1vw);
+      }
+
+      @else if type-of($value)==string {
+        $vw: append($vw, $value);
+      }
+    }
+
+    @return $vw;
+  }
+
+  @else {
+    @return $target;
+  }
+}
+
 
 // sticky header height normal, no scrolling
 $header-max-height: 100px;
@@ -11,6 +43,7 @@ $content-padding-x: 50px;
 // footer
 $footer-text-color: #b1c4d0;
 $footer-bg-color: #15384f;
+
 
 .header-container {
   display: flex;
@@ -36,7 +69,7 @@ $footer-bg-color: #15384f;
     padding-left: $content-padding-x;
     padding-right: $content-padding-x;
 
-    > * {
+    >* {
       display: flex;
       flex-direction: row;
       justify-content: center;
@@ -73,6 +106,112 @@ $footer-bg-color: #15384f;
   }
 }
 
+#header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: 100vw;
+  height: vw(52);
+  background: #f5eb51;
+
+  .inner {
+    display: flex;
+    align-items: center;
+    padding: 0 vw(20);
+
+    .nav {
+      display: flex;
+      align-items: center;
+
+      .barMenu {
+        display: flex;
+        align-items: center;
+        position: relative;
+        width: vw(18);
+        height: vw(13);
+
+        .bar {
+          display: block;
+          width: 80%;
+          height: vw(1);
+          background: #1a1a1a;
+          border-radius: vw(4);
+        }
+
+        &:before,
+        &:after {
+          display: block;
+          clear: both;
+          content: '';
+          position: absolute;
+          left: 0;
+          width: 100%;
+          height: vw(1);
+          background: #1a1a1a;
+        }
+
+        &:before {
+          top: 0;
+        }
+
+        &:after {
+          width: 60%;
+          bottom: 0;
+        }
+      }
+
+      .gnb-wrapper {
+        display: none;
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 5;
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+
+        .gnb-inner {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          height: 100%;
+          padding: vw(20);
+
+          .closeGnb {
+            width: vw(30);
+            height: vw(30);
+            margin-left: auto;
+          }
+
+          .gnb {
+            li {
+              font-size: vw(14);
+              padding: vw(8) 0;
+
+              a {
+                font-size: vw(18);
+                font-family: "Hi Melody";
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .logo {
+      font-size: vw(12);
+      margin: auto;
+      width: vw(50);
+      height: auto;
+
+      img {
+        width: 100%;
+      }
+    }
+  }
+}
+
 .main-container {
   display: flex;
   flex: 1 0 auto;
@@ -101,8 +240,7 @@ $footer-bg-color: #15384f;
   color: $footer-text-color;
   background-color: $footer-bg-color;
 
-  .footer-content {
-  }
+  .footer-content {}
 
   a {
     color: $footer-text-color;
