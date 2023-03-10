@@ -130,6 +130,8 @@ $footer-bg-color: #15384f;
         position: relative;
         width: vw(18);
         height: vw(13);
+        background: transparent;
+        border: none;
 
         .bar {
           display: block;
